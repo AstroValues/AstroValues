@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch & Tame Values</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --accent: #38bdf8;
+            --border: #334155;
+            --rarity-secret: #ffffff;
+            --rarity-exclusive: #c084fc;
+            --rarity-mythic: #ef4444;
+            --shadow-secret: 0 0 10px rgba(255, 255, 255, 0.8);
+            --shadow-exclusive: 0 0 10px rgba(192, 132, 252, 0.8);
+        }
+
+        * { box-sizing: border-box; margin:0; padding:0; font-family:'Inter', sans-serif; }
+        body { background:var(--bg); color:var(--text); line-height:1.5; }
+
+        nav { background:#020617; padding:1rem; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; border-bottom:1px solid #1e293b; z-index:100; }
+        .logo { color:var(--accent); font-weight:bold; letter-spacing:1px; }
+        .nav-menu { display:none; flex-direction:column; position:absolute; top:100%; left:0; width:100%; background:#020617; padding:1rem; border-bottom:1px solid #1e293b; }
+        .nav-menu.active { display:flex; }
+        .nav-link { color:var(--text); text-decoration:none; padding:0.75rem 0; cursor:pointer; }
+        .nav-link:hover { color:var(--accent); }
+        .hamburger { font-size:1.5rem; cursor:pointer; background:none; border:none; color:white; }
+
+        section { padding:2rem 1rem; max-width:1200px; margin:0 auto; }
+        .hidden { display:none; }
+
+        .category-title { margin: 2rem 0 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+
+        .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:1rem; }
+        .card { background:var(--card); border-radius:0.75rem; padding:1rem; text-align:center; border:1px solid transparent; transition:0.2s; }
+        .card:hover { transform:translateY(-4px); border-color:#334155; }
+        .card-value { color:#10b981; font-weight:600; margin:0.25rem 0; }
+        .card-info { color:#94a3b8; font-size:0.75rem; margin-top:2px; }
+        .rarity-secret { color:var(--rarity-secret); font-weight:800; text-shadow: var(--shadow-secret); }
+        .rarity-exclusive { color:var(--rarity-exclusive); font-weight:800; text-shadow: var(--shadow-exclusive); }
+        .rarity-mythic { color:var(--rarity-mythic); font-weight:800; }
+
+        .placeholder {
+            width:80px; height:80px; background:#334155; display:flex; align-items:center; justify-content:center;
+            border-radius:8px; margin:0 auto 0.75rem; color:white; font-size:0.7rem; text-align:center; padding:4px;
+        }
+
+        .calculator-container { display:grid; gap:2rem; grid-template-columns:1fr; }
+        @media(min-width:768px){ 
+            .calculator-container { grid-template-columns:1fr 1fr; } 
+            .nav-menu{ display:flex; flex-direction:row; position:static; gap:2rem; border:none; padding:0; } 
+            .hamburger{display:none;} 
+            .card-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));} 
+        }
+
+        .offer-side { background:#020617; padding:1.5rem; border-radius:1rem; border:1px solid #1e293b; }
+        .side-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .side-title { font-weight:600; text-transform:uppercase; letter-spacing:1px; }
+        .add-btn { background: var(--accent); color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 0.4rem; cursor: pointer; font-weight: bold; }
+        .total-value { color:#10b981; font-weight:bold; font-size:1.75rem; margin-bottom: 1.5rem; border-bottom:2px solid #1e293b; padding-bottom:0.5rem; }
+        
+        .trade-items { display: flex; flex-direction: column; gap: 0.75rem; }
+        .trade-item { background: var(--card); padding: 0.75rem; border-radius: 0.5rem; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); }
+        .item-details { display: flex; flex-direction: column; }
+        .remove-btn { color: #ef4444; background: none; border: none; cursor: pointer; font-size: 1.2rem; }
+
+        .diff-indicator { text-align:center; padding:2rem; font-size:1.5rem; font-weight:800; grid-column:1/-1; background:#020617; border-radius:1rem; border:1px dashed #334155; margin-top:1rem; }
+
+        /* Modal */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
+        .modal-content { background: var(--card); padding: 2rem; border-radius: 1rem; width: 100%; max-width: 400px; }
+        .modal-content h3 { margin-bottom: 1rem; }
+        .modal-content select, .modal-content button { width: 100%; padding: 0.75rem; margin-bottom: 1rem; border-radius: 0.5rem; background: var(--bg); color: white; border: 1px solid var(--border); }
+        .modal-content button.confirm { background: var(--accent); border: none; font-weight: bold; cursor: pointer; }
+        .modal-content button.cancel { background: none; border: none; color: #94a3b8; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">C&T VALUES</div>
+    <button class="hamburger" id="hamburger">☰</button>
+    <div class="nav-menu" id="nav-menu">
+        <a class="nav-link" onclick="showSection('value-list')">Value List</a>
+        <a class="nav-link" onclick="showSection('calculator')">Trade Calculator</a>
+    </div>
+</nav>
+
+<section id="value-list">
+    <h2>Value List</h2>
+    <div style="text-align:center; margin-bottom:1rem;">
+        <a href="https://discord.gg/dU86TcTQ8" target="_blank" style="display:inline-block; padding:0.5rem 1rem; background:#5865F2; color:white; border-radius:0.5rem; font-weight:bold; text-decoration:none;">Join Our Discord</a>
+    </div>
+    
+    <h3 class="category-title">Secrets</h3>
+    <div class="card-grid" id="grid-secrets"></div>
+    
+    <h3 class="category-title">Christmas Pets</h3>
+    <div class="card-grid" id="grid-christmas"></div>
+    
+    <h3 class="category-title">Exclusive Pets</h3>
+    <div class="card-grid" id="grid-exclusive"></div>
+    
+    <h3 class="category-title">Prehistoric Pets</h3>
+    <div class="card-grid" id="grid-prehistoric"></div>
+    
+    <h3 class="category-title">Mythic Pets</h3>
+    <div class="card-grid" id="grid-mythic"></div>
+
+    <h3 class="category-title">Eggs</h3>
+    <div class="card-grid" id="grid-eggs"></div>
+</section>
+
+<section id="calculator" class="hidden">
+    <h2>Trade Calculator</h2>
+    <div class="calculator-container">
+        <div class="offer-side" id="side-left">
+            <div class="side-header">
+                <div class="side-title">Your Offer</div>
+                <button class="add-btn" onclick="openAddModal('left')">+</button>
+            </div>
+            <div class="total-value" id="total-left">0</div>
+            <div class="trade-items" id="items-left"></div>
+        </div>
+        <div class="offer-side" id="side-right">
+            <div class="side-header">
+                <div class="side-title">Their Offer</div>
+                <button class="add-btn" onclick="openAddModal('right')">+</button>
+            </div>
+            <div class="total-value" id="total-right">0</div>
+            <div class="trade-items" id="items-right"></div>
+        </div>
+        <div class="diff-indicator" id="diff-indicator">Add items to calculate</div>
+    </div>
+</section>
+
+<div class="modal" id="add-modal">
+    <div class="modal-content">
+        <h3 id="modal-title">Add Item</h3>
+        <select id="modal-item-select" onchange="toggleModalOptions()">
+            <option value="">Select Item</option>
+        </select>
+        <div id="modal-options">
+            <label>Size:</label>
+            <select id="modal-size-select"></select>
+            <label>Mutation:</label>
+            <select id="modal-mut-select"></select>
+        </div>
+        <button class="confirm" onclick="addItemFromModal()">Add to Trade</button>
+        <button class="cancel" onclick="closeModal()">Cancel</button>
+    </div>
+</div>
+
+<script>
+const items = {
+    secrets: [
+        {name:"Nugget", val:650, demand:5, rarity:"Secret"},
+        {name:"Ethdaniel", val:150, demand:3, rarity:"Secret"},
+        {name:"Giant Duck", val:100, demand:4, rarity:"Secret"},
+        {name:"Dingrat", val:50, demand:2, rarity:"Secret"},
+        {name:"Giant Worm", val:87.5, demand:3.5, rarity:"Secret"},
+        {name:"Feep", val:75, demand:2, rarity:"Secret"},
+        {name:"404 Goat", val:50, demand:1, rarity:"Secret"}
+    ],
+    christmas: [
+        {name:"Christmas Dragon", val:1500, demand:5, rarity:"Exclusive"},
+        {name:"Mammoth", val:320, demand:2.5, rarity:"Exclusive"},
+        {name:"Narwhal", val:250, demand:3, rarity:"Exclusive"},
+        {name:"Musk Ox", val:100, demand:2, rarity:"Exclusive"},
+        {name:"Arctic Fox", val:50, demand:5, rarity:"Exclusive"}
+    ],
+    exclusive_egg_1: [
+        {name:"Evil Feep", val:2625, demand:5, rarity:"Exclusive"},
+        {name:"Ice Dragon", val:335, demand:3, rarity:"Exclusive"},
+        {name:"Phoenix", val:150, demand:2.5, rarity:"Exclusive"},
+        {name:"Lava Bear", val:100, demand:2.5, rarity:"Exclusive"}
+    ],
+    prehistoric: [
+        {name:"Infernal Hydra", val:3000, demand:4, rarity:"Exclusive"},
+        {name:"Infernal Axolotl", val:425, demand:3.75, rarity:"Exclusive"},
+        {name:"Butterfly", val:175, demand:3.5, rarity:"Exclusive"},
+        {name:"Dragonfly", val:180, demand:3, rarity:"Exclusive"},
+        {name:"Pterodactyl", val:50, demand:2, rarity:"Exclusive"}
+    ],
+    mythic: [
+        {name:"Lightning Dragon", val:220, demand:4.5, rarity:"Mythic"},
+        {name:"Celestial Hydra", val:145, demand:4, rarity:"Mythic"},
+        {name:"Yeti", val:60, demand:1.5, rarity:"Mythic"},
+        {name:"Cosmic Griffin", val:85, demand:3.5, rarity:"Mythic"},
+        {name:"Griffin", val:95, demand:2, rarity:"Mythic"},
+        {name:"Basilik", val:95, demand:2, rarity:"Mythic"},
+        {name:"Emerald Dragon", val:75, demand:2, rarity:"Mythic"},
+        {name:"Brontosaurus", val:40, demand:2, rarity:"Mythic"},
+        {name:"T-Rex", val:55, demand:2.5, rarity:"Mythic"},
+        {name:"Mantis", val:40, demand:2, rarity:"Mythic"},
+        {name:"Hydra", val:110, demand:3, rarity:"Mythic"},
+        {name:"Celestial Griffin", val:85, demand:3, rarity:"Mythic"},
+        {name:"Celestial Axolotl", val:130, demand:4, rarity:"Mythic"},
+        {name:"Galaxy Axolotl", val:112.5, demand:4, rarity:"Mythic"},
+        {name:"Galaxy Kitsune", val:112.5, demand:3.5, rarity:"Mythic"},
+        {name:"Cerberus", val:17.5, demand:1.5, rarity:"Mythic"},
+        {name:"Red Fox", val:15, demand:1.5, rarity:"Mythic"},
+        {name:"Kitsune", val:12.5, demand:1, rarity:"Mythic"},
+        {name:"Axolotl", val:12.5, demand:1, rarity:"Mythic"},
+        {name:"Megalodon", val:70, demand:2.5, rarity:"Mythic"},
+        {name:"Kraken", val:65, demand:2, rarity:"Mythic"}
+    ],
+    eggs: [
+        {name:"Xmas Egg", val:175, demand:5, rarity:"exclusive", isEgg: true},
+        {name:"Exclusive Egg", val:125, demand:4, rarity:"exclusive", isEgg: true},
+        {name:"Prehistoric Egg", val:150, demand:4, rarity:"exclusive", isEgg: true},
+        {name:"Celestial Hydra Egg", val:125, demand:4, rarity:"Mythic", isEgg: true},
+        {name:"Hydra Egg", val:110, demand:3.5, rarity:"Mythic", isEgg: true},
+        {name:"Celestial Axolotl Egg", val:115, demand:4.5, rarity:"Mythic", isEgg: true},
+        {name:"Celestial Griffin Egg", val:85, demand:2.5, rarity:"Mythic", isEgg: true},
+        {name:"Galaxy Axolotl Egg", val:100, demand:4, rarity:"Mythic", isEgg: true},
+        {name:"Galaxy Kitsune Egg", val:90, demand:3.5, rarity:"Mythic", isEgg: true}
+    ]
+};
+
+const sizes = [
+    {name:"Normal (1x)", mult:1},
+    {name:"Tiny (1.25x)", mult:1.25},
+    {name:"Big (1.5x)", mult:1.5},
+    {name:"Huge (1.75x)", mult:1.75},
+    {name:"Collosal (2x)", mult:2}
+];
+
+const mutations = [
+    {name:"None (1x)", mult:1},
+    {name:"Shiny (2x)", mult:2},
+    {name:"Albino (1.25x)", mult:1.25},
+    {name:"Gold (1.5x)", mult:1.5},
+    {name:"Rainbow (1.75x)", mult:1.75},
+    {name:"Glass (1.7x)", mult:1.7},
+    {name:"Cosmic (1.1x)", mult:1.1},
+    {name:"Charged (1.1x)", mult:1.1},
+    {name:"Frozen (1.25x)", mult:1.25},
+    {name:"Volcanic (1.5x)", mult:1.5},
+    {name:"Seabound (1.1x)", mult:1.1},
+    {name:"Neon (2.5x)", mult:2.5}
+];
+
+let trades = { left: [], right: [] };
+let activeSide = 'left';
+
+function formatVal(v){ return v>=1000 ? (v/1000).toFixed(1)+'K' : v; }
+
+function renderValueList(){
+    const map = {
+        secrets: 'grid-secrets',
+        christmas: 'grid-christmas',
+        exclusive_egg_1: 'grid-exclusive',
+        prehistoric: 'grid-prehistoric',
+        mythic: 'grid-mythic',
+        eggs: 'grid-eggs'
+    };
+    for(let cat in map){
+        const g = document.getElementById(map[cat]);
+        g.innerHTML = '';
+        items[cat].forEach(item=>{
+            const div = document.createElement('div');
+            div.className = 'card';
+            div.innerHTML = `
+                <div class="placeholder">${item.name}</div>
+                <div class="rarity-${item.rarity.toLowerCase()}">${item.name}</div>
+                <div class="card-value">${formatVal(item.val)}</div>
+                <div class="card-info">Demand: ${item.demand}/5</div>
+            `;
+            g.appendChild(div);
+        });
+    }
+}
+
+function showSection(id){
+    document.querySelectorAll('section').forEach(s=>s.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+    document.getElementById('nav-menu').classList.remove('active');
+}
+
+document.getElementById('hamburger').onclick = ()=>document.getElementById('nav-menu').classList.toggle('active');
+
+// Modal Logic
+function openAddModal(side){
+    activeSide = side;
+    const modal = document.getElementById('add-modal');
+    const select = document.getElementById('modal-item-select');
+    select.innerHTML = '<option value="">Select Item</option>';
+    
+    for(let cat in items){
+        items[cat].forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p.name;
+            opt.textContent = p.name + (p.isEgg ? ' (Egg)' : '');
+            select.appendChild(opt);
+        });
+    }
+    
+    const sizeSelect = document.getElementById('modal-size-select');
+    sizeSelect.innerHTML = '';
+    sizes.forEach(s => sizeSelect.innerHTML += `<option value="${s.mult}">${s.name}</option>`);
+    
+    const mutSelect = document.getElementById('modal-mut-select');
+    mutSelect.innerHTML = '';
+    mutations.forEach(m => mutSelect.innerHTML += `<option value="${m.mult}">${m.name}</option>`);
+    
+    modal.style.display = 'flex';
+    toggleModalOptions();
+}
+
+function toggleModalOptions(){
+    const itemName = document.getElementById('modal-item-select').value;
+    const options = document.getElementById('modal-options');
+    let item = null;
+    for(let cat in items){
+        const found = items[cat].find(p => p.name === itemName);
+        if(found){ item = found; break; }
+    }
+    options.style.display = (item && item.isEgg) ? 'none' : 'block';
+}
+
+function addItemFromModal(){
+    const itemName = document.getElementById('modal-item-select').value;
+    if(!itemName) return;
+    
+    let item = null;
+    for(let cat in items){
+        const found = items[cat].find(p => p.name === itemName);
+        if(found){ item = found; break; }
+    }
+    
+    const sizeMult = item.isEgg ? 1 : parseFloat(document.getElementById('modal-size-select').value);
+    const mutMult = item.isEgg ? 1 : parseFloat(document.getElementById('modal-mut-select').value);
+    const totalVal = item.val * sizeMult * mutMult;
+    
+    const sizeName = item.isEgg ? '' : sizes.find(s => s.mult === sizeMult).name.split(' (')[0];
+    const mutName = item.isEgg ? '' : mutations.find(m => m.mult === mutMult).name.split(' (')[0];
+
+    trades[activeSide].push({
+        name: item.name,
+        rarity: item.rarity,
+        val: totalVal,
+        details: item.isEgg ? 'Egg' : `${sizeName} ${mutName}`
+    });
+    
+    closeModal();
+    renderTrades();
+}
+
+function closeModal(){ document.getElementById('add-modal').style.display = 'none'; }
+
+function removeTradeItem(side, index){
+    trades[side].splice(index, 1);
+    renderTrades();
+}
+
+function renderTrades(){
+    ['left', 'right'].forEach(side => {
+        const container = document.getElementById(`items-${side}`);
+        container.innerHTML = '';
+        let total = 0;
+        trades[side].forEach((item, idx) => {
+            total += item.val;
+            const div = document.createElement('div');
+            div.className = 'trade-item';
+            div.innerHTML = `
+                <div class="item-details">
+                    <span class="rarity-${item.rarity.toLowerCase()}" style="font-weight:bold">${item.name}</span>
+                    <span style="font-size:0.8rem; color:#94a3b8">${item.details}</span>
+                    <span style="color:#10b981; font-weight:600">${formatVal(item.val)}</span>
+                </div>
+                <button class="remove-btn" onclick="removeTradeItem('${side}', ${idx})">×</button>
+            `;
+            container.appendChild(div);
+        });
+        document.getElementById(`total-${side}`).innerText = formatVal(total);
+    });
+    
+    const leftTotal = trades.left.reduce((acc, i) => acc + i.val, 0);
+    const rightTotal = trades.right.reduce((acc, i) => acc + i.val, 0);
+    const diffInd = document.getElementById('diff-indicator');
+    
+    if(leftTotal === 0 && rightTotal === 0){
+        diffInd.innerText = 'Add items to calculate';
+        diffInd.style.color = '#94a3b8';
+    } else {
+        const diff = rightTotal - leftTotal;
+        const percent = (diff / leftTotal) * 100;
+        if(percent > 15) { diffInd.innerText = `HUGE WIN (+${formatVal(diff)})`; diffInd.style.color = '#10b981'; }
+        else if(percent < -15) { diffInd.innerText = `HUGE LOSS (${formatVal(diff)})`; diffInd.style.color = '#ef4444'; }
+        else { diffInd.innerText = 'FAIR TRADE'; diffInd.style.color = '#3b82f6'; }
+    }
+}
+
+renderValueList();
+renderTrades();
+</script>
+</body>
+</html>
