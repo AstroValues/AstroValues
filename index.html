@@ -16,6 +16,7 @@
             --rarity-mythic: #ef4444;
             --shadow-secret: 0 0 10px rgba(255, 255, 255, 0.8);
             --shadow-exclusive: 0 0 10px rgba(192, 132, 252, 0.8);
+            --trend: #fbbf24;
         }
 
         * { box-sizing: border-box; margin:0; padding:0; font-family:'Inter', sans-serif; }
@@ -32,7 +33,7 @@
         section { padding:2rem 1rem; max-width:1200px; margin:0 auto; transition: opacity 0.3s ease-in-out; }
         .hidden { display:none; opacity: 0; }
 
-        .category-title { margin: 2rem 0 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+        .category-title { margin: 2rem 0 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; display: flex; align-items: center; justify-content: space-between; }
 
         .search-container { margin: 1rem 0; position: relative; }
         .search-bar { width: 100%; padding: 0.8rem 1rem; background: var(--card); border: 1px solid var(--border); border-radius: 0.5rem; color: white; font-size: 1rem; transition: border-color 0.2s; }
@@ -47,7 +48,7 @@
             border:1px solid transparent; 
             transition:0.3s cubic-bezier(0.4, 0, 0.2, 1); 
             cursor:pointer;
-            animation: fadeIn 0.5s ease-out backwards;
+            position: relative;
         }
         .card:hover { transform:translateY(-8px) scale(1.02); border-color:var(--accent); box-shadow: 0 0 15px rgba(56, 189, 248, 0.3); }
         .card-value { color:#10b981; font-weight:600; margin:0.25rem 0; }
@@ -55,6 +56,8 @@
         .rarity-secret { color:var(--rarity-secret); font-weight:800; text-shadow: var(--shadow-secret); }
         .rarity-exclusive { color:var(--rarity-exclusive); font-weight:800; text-shadow: var(--shadow-exclusive); }
         .rarity-mythic { color:var(--rarity-mythic); font-weight:800; }
+
+        .trending-badge { position: absolute; top: 0.5rem; right: 0.5rem; background: var(--trend); color: #000; font-size: 0.6rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
 
         .placeholder {
             width:100%; aspect-ratio:1/1; background:#334155; display:flex; align-items:center; justify-content:center;
@@ -76,52 +79,27 @@
         .side-title { font-weight:600; text-transform:uppercase; letter-spacing:1px; }
         .add-btn { background: var(--accent); color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 0.4rem; cursor: pointer; font-weight: bold; transition: transform 0.2s; }
         .add-btn:hover { transform: scale(1.1); }
-        .add-btn:active { transform: scale(0.9); }
         .total-value { color:#10b981; font-weight:bold; font-size:1.75rem; margin-bottom: 1.5rem; border-bottom:2px solid #1e293b; padding-bottom:0.5rem; }
 
         .trade-items { display: flex; flex-direction: column; gap: 0.75rem; }
-        .trade-item { background: var(--card); padding: 0.75rem; border-radius: 0.5rem; display: flex; gap: 1rem; align-items: center; border: 1px solid var(--border); animation: slideIn 0.3s ease-out; }
+        .trade-item { background: var(--card); padding: 0.75rem; border-radius: 0.5rem; display: flex; gap: 1rem; align-items: center; border: 1px solid var(--border); }
         .item-thumb { width: 50px; height: 50px; border-radius: 4px; background: #334155; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
         .item-thumb img { width: 100%; height: 100%; object-fit: contain; }
         .item-details { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; }
-        .remove-btn { color: #ef4444; background: none; border: none; cursor: pointer; font-size: 1.2rem; transition: 0.2s; }
-        .remove-btn:hover { transform: scale(1.2); }
+        .remove-btn { color: #ef4444; background: none; border: none; cursor: pointer; font-size: 1.2rem; }
 
-        /* Modal */
+        .diff-indicator { text-align:center; padding:2rem; font-size:1.5rem; font-weight:800; grid-column:1/-1; background:#020617; border-radius:1rem; border:1px dashed #334155; margin-top:1rem; }
+
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; backdrop-filter: blur(4px); }
-        .modal-content {
-            background: var(--card);
-            padding: 2rem;
-            padding-bottom: 3rem; 
-            border-radius: 1rem;
-            width: 100%;
-            max-width: 450px;
-            max-height: 90vh;      /* <-- limit height to 90% of viewport */
-            overflow-y: auto;      /* <-- enable vertical scrolling */
-            position: relative;
-            animation: modalPop 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-        }
+        .modal-content { background: var(--card); padding: 2rem; border-radius: 1rem; width: 100%; max-width: 450px; max-height: 90vh; overflow-y: auto; position: relative; }
         .modal-content h3 { margin-bottom: 1rem; color: var(--accent); }
-        .modal-content select, .modal-content button.confirm, .modal-content button.category-btn { width: 100%; padding: 0.75rem; margin-bottom: 1rem; border-radius: 0.5rem; background: var(--bg); color: white; border: 1px solid var(--border); cursor: pointer; transition: 0.2s; }
+        .modal-content select, .modal-content button.confirm, .modal-content button.category-btn { width: 100%; padding: 0.75rem; margin-bottom: 1rem; border-radius: 0.5rem; background: var(--bg); color: white; border: 1px solid var(--border); cursor: pointer; }
         .modal-content button.confirm { background: var(--accent); border: none; font-weight: bold; }
-        .modal-content button.confirm:hover { filter: brightness(1.1); }
-        .modal-content button.confirm:active { transform: scale(0.98); }
         .modal-content button.cancel { background: none; border: none; color: #94a3b8; cursor: pointer; width: 100%; margin-top: 0.5rem; }
 
-        .detail-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
-        .detail-label { color: #94a3b8; }
-        .detail-value { font-weight: 600; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes modalPop { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-
-        .active-btn { background: var(--accent) !important; border-color: white !important; box-shadow: 0 0 10px rgba(56, 189, 248, 0.5); }
+        .active-btn { background: var(--accent) !important; border-color: white !important; }
         .detail-img-box { width: 150px; height: 150px; background: #020617; border-radius: 1rem; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); overflow: hidden; }
         .detail-img-box img { max-width: 90%; max-height: 90%; object-fit: contain; }
-
-        .btn-anim { transition: transform 0.1s; }
-        .btn-anim:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
@@ -144,6 +122,9 @@
     <div class="search-container">
         <input type="text" class="search-bar" id="value-search" placeholder="Search pets or eggs..." onkeyup="filterValueList()">
     </div>
+
+    <h3 class="category-title">Trending Now</h3>
+    <div class="card-grid" id="grid-trending"></div>
 
     <h3 class="category-title">Secrets</h3>
     <div class="card-grid" id="grid-secrets"></div>
@@ -170,7 +151,7 @@
         <div class="offer-side" id="side-left">
             <div class="side-header">
                 <div class="side-title">Your Offer</div>
-                <button class="add-btn btn-anim" onclick="openInitialModal('left')">+</button>
+                <button class="add-btn" onclick="openInitialModal('left')">+</button>
             </div>
             <div class="total-value" id="total-left">0</div>
             <div class="trade-items" id="items-left"></div>
@@ -178,7 +159,7 @@
         <div class="offer-side" id="side-right">
             <div class="side-header">
                 <div class="side-title">Their Offer</div>
-                <button class="add-btn btn-anim" onclick="openInitialModal('right')">+</button>
+                <button class="add-btn" onclick="openInitialModal('right')">+</button>
             </div>
             <div class="total-value" id="total-right">0</div>
             <div class="trade-items" id="items-right"></div>
@@ -186,17 +167,16 @@
     </div>
 </section>
 
-<!-- Initial Selection Modal -->
+<!-- Modals -->
 <div class="modal" id="initial-modal">
     <div class="modal-content">
         <h3>What are you adding?</h3>
-        <button class="confirm btn-anim" onclick="selectCategory('pet')">Pet</button>
-        <button class="confirm btn-anim" onclick="selectCategory('egg')">Egg</button>
+        <button class="confirm" onclick="selectCategory('pet')">Pet</button>
+        <button class="confirm" onclick="selectCategory('egg')">Egg</button>
         <button class="cancel" onclick="closeModal('initial-modal')">Cancel</button>
     </div>
 </div>
 
-<!-- Item Selection Modal -->
 <div class="modal" id="item-modal">
     <div class="modal-content">
         <h3 id="item-modal-title">Select Item</h3>
@@ -206,167 +186,167 @@
     </div>
 </div>
 
-<!-- Stats Selection Modal -->
-    <!-- Stats Modal -->
-    <div class="modal" id="stats-modal">
-        <div class="modal-content">
-            <!-- Top-right close button -->
-            <button class="modal-close" onclick="closeModal('stats-modal')">×</button>
-
-            <h3 id="stats-modal-title">Stats</h3>
-
-            <!-- Scrollable content container -->
-            <div style="max-height: 400px; overflow-y: auto; padding-bottom: 1rem;">
-                <div class="detail-img-box" id="stats-img-box"></div>
-
-                <div id="item-details-info" style="margin-bottom: 1rem;">
-                    <div class="detail-row">
-                        <span class="detail-label">Rarity:</span> 
-                        <span class="detail-value" id="detail-rarity"></span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Base Value:</span> 
-                        <span class="detail-value" id="detail-val"></span>
-                    </div>
-                    <div class="detail-row" id="demand-row">
-                        <span class="detail-label">Demand:</span> 
-                        <span class="detail-value" id="detail-demand"></span>
-                    </div>
-                </div>
-
-                <div id="pet-stats-controls">
-                    <label>Size (Select One):</label>
-                    <div id="size-options" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem;"></div>
-
-                    <label>Mutations (Toggle Multiple):</label>
-                    <div id="mutation-options" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem;"></div>
-                </div>
-
-                <div id="egg-stats-controls" class="hidden">
-                    <p style="text-align: center; color: #94a3b8; margin-bottom: 1rem;">Base Egg Value</p>
-                </div>
-
-                <div style="margin-top: 1rem; padding: 0.75rem; background: var(--bg); border-radius: 0.5rem; text-align: center; border: 1px solid var(--border);">
-                    Total Value: <span id="temp-total-val" style="color: #10b981; font-weight: bold; font-size: 1.2rem;">0</span>
-                </div>
-            </div>
-
-            <!-- Optional bottom add button -->
-            <button id="add-to-trade-btn" class="confirm btn-anim" onclick="finishAddingItem()" style="margin-top: 1rem;">Add to Trade</button>
+<div class="modal" id="stats-modal">
+    <div class="modal-content">
+        <h3 id="stats-modal-title">Stats</h3>
+        <div class="detail-img-box" id="stats-img-box"></div>
+        <div id="pet-stats-controls">
+            <label>Size:</label>
+            <div id="size-options" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem;"></div>
+            <label>Mutations:</label>
+            <div id="mutation-options" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem;"></div>
         </div>
+        <div id="egg-stats-controls" class="hidden">
+            <p style="text-align: center; color: #94a3b8; margin-bottom: 1rem;">Base Egg Value</p>
+        </div>
+        <div style="margin-top: 1rem; padding: 0.75rem; background: var(--bg); border-radius: 0.5rem; text-align: center; border: 1px solid var(--border);">
+            Total: <span id="temp-total-val" style="color: #10b981; font-weight: bold;">0</span>
+        </div>
+        <button id="add-to-trade-btn" class="confirm" onclick="finishAddingItem()" style="margin-top: 1rem;">Add to Trade</button>
+        <button class="cancel" onclick="closeModal('stats-modal')">Cancel</button>
     </div>
+</div>
 
 <script>
-const items = {
-    secrets: [
-        {name:"Nugget", val:650, demand:5, rarity:"Secret", img: ""},
-        {name:"Ethdaniel", val:150, demand:3, rarity:"Secret", img: ""},
-        {name:"Giant Duck", val:100, demand:4, rarity:"Secret", img: ""},
-        {name:"Dingrat", val:50, demand:2, rarity:"Secret", img: ""},
-        {name:"Giant Worm", val:87.5, demand:3.5, rarity:"Secret", img: ""},
-        {name:"Feep", val:75, demand:2, rarity:"Secret", img: ""},
-        {name:"404 Goat", val:50, demand:1, rarity:"Secret", img: ""},
-    ],
-    christmas: [
-        {name:"Christmas Dragon", val:1500, demand:5, rarity:"Exclusive", img: ""},
-        {name:"Mammoth", val:320, demand:2.5, rarity:"Exclusive", img: ""},
-        {name:"Narwhal", val:250, demand:3, rarity:"Exclusive", img: ""},
-        {name:"Musk Ox", val:100, demand:2, rarity:"Exclusive", img: ""},
-        {name:"Arctic Fox", val:50, demand:5, rarity:"Exclusive", img: ""},
-    ],
-    exclusive_egg_1: [
-        {name:"Evil Feep", val:2625, demand:5, rarity:"Exclusive", img: ""},
-        {name:"Ice Dragon", val:335, demand:3, rarity:"Exclusive", img: ""},
-        {name:"Phoenix", val:150, demand:2.5, rarity:"Exclusive", img: ""},
-        {name:"Lava Bear", val:100, demand:2.5, rarity:"Exclusive", img: ""},
-    ],
-    prehistoric: [
-        {name:"Infernal Hydra", val:3000, demand:4, rarity:"Exclusive", img: ""},
-        {name:"Infernal Axolotl", val:425, demand:3.75, rarity:"Exclusive", img: ""},
-        {name:"Butterfly", val:175, demand:3.5, rarity:"Exclusive", img: ""},
-        {name:"Dragonfly", val:180, demand:3, rarity:"Exclusive", img: ""},
-        {name:"Pterodactyl", val:50, demand:2, rarity:"Exclusive", img: ""},
-    ],
-    mythic: [
-        {name:"Lightning Dragon", val:220, demand:4.5, rarity:"Mythic", img: ""},
-        {name:"Celestial Hydra", val:145, demand:4, rarity:"Mythic", img: ""},
-        {name:"Yeti", val:60, demand:1.5, rarity:"Mythic", img: ""},
-        {name:"Cosmic Griffin", val:85, demand:3.5, rarity:"Mythic", img: ""},
-        {name:"Griffin", val:95, demand:2, rarity:"Mythic", img: ""},
-        {name:"Basilik", val:95, demand:2, rarity:"Mythic", img: ""},
-        {name:"Emerald Dragon", val:75, demand:2, rarity:"Mythic", img: ""},
-        {name:"Brontosaurus", val:40, demand:2, rarity:"Mythic", img: ""},
-        {name:"T-Rex", val:55, demand:2.5, rarity:"Mythic", img: ""},
-        {name:"Mantis", val:40, demand:2, rarity:"Mythic", img: ""},
-        {name:"Hydra", val:110, demand:3, rarity:"Mythic", img: ""},
-        {name:"Celestial Griffin", val:85, demand:3, rarity:"Mythic", img: ""},
-        {name:"Celestial Axolotl", val:130, demand:4, rarity:"Mythic", img: ""},
-        {name:"Galaxy Axolotl", val:112.5, demand:4, rarity:"Mythic", img: ""},
-        {name:"Galaxy Kitsune", val:112.5, demand:3.5, rarity:"Mythic", img: ""},
-        {name:"Cerberus", val:17.5, demand:1.5, rarity:"Mythic", img: ""},
-        {name:"Red Fox", val:15, demand:1.5, rarity:"Mythic", img: ""},
-        {name:"Kitsune", val:12.5, demand:1, rarity:"Mythic", img: ""},
-        {name:"Axolotl", val:12.5, demand:1, rarity:"Mythic", img: ""},
-        {name:"Megalodon", val:70, demand:2.5, rarity:"Mythic", img: ""},
-        {name:"Kraken", val:65, demand:2, rarity:"Mythic", img: ""}
-    ],
-    eggs: [
-        {name:"Xmas Egg", val:175, demand:5, rarity:"Exclusive", isEgg: true, img: ""},
-        {name:"Exclusive Egg", val:125, demand:4, rarity:"Exclusive", isEgg: true, img: ""},
-        {name:"Prehistoric Egg", val:150, demand:4, rarity:"Exclusive", isEgg: true, img: ""},
-        {name:"skelatal egg", val:50, demand:5, rarity:"exclusive", isEgg: true, img: ""},
-        {name:"Celestial Hydra Egg", val:125, demand:4, rarity:"Mythic", isEgg: true, img: ""},
-        {name:"Hydra Egg", val:110, demand:3.5, rarity:"Mythic", isEgg: true, img: ""},
-        {name:"Celestial Axolotl Egg", val:115, demand:4.5, rarity:"Mythic", isEgg: true, img: ""},
-        {name:"Celestial Griffin Egg", val:85, demand:2.5, rarity:"Mythic", isEgg: true, img: ""},
-        {name:"Galaxy Axolotl Egg", val:100, demand:4, rarity:"Mythic", isEgg: true, img: ""},
-        {name:"Galaxy Kitsune Egg", val:90, demand:3.5, rarity:"Mythic", isEgg: true, img: ""},
-    ]
+// --- MULTIPLIER CONFIGURATION ---
+// Customize multipliers for specific pets here.
+// Eggs are always 1x and ignore these.
+const customMultipliers = {
+    "Evil Feep": {
+        sizes: [
+            {name:"Normal", mult:1}, {name:"Tiny", mult:1.3}, {name:"Big", mult:1.6}, {name:"Huge", mult:2.0}, {name:"Collosal", mult:2.5}
+        ],
+        mutations: [
+            {name:"Shiny", mult:2.5}, {name:"Albino", mult:1.5}, {name:"Gold", mult:2.0}, {name:"Rainbow", mult:2.5}, {name:"Neon", mult:3.0}
+        ]
+    },
+    "Infernal Hydra": {
+        sizes: [
+            {name:"Normal", mult:1}, {name:"Tiny", mult:1.5}, {name:"Big", mult:2.0}, {name:"Huge", mult:3.0}, {name:"Collosal", mult:5.0}
+        ],
+        mutations: [
+            {name:"Shiny", mult:5.0}, {name:"Neon", mult:10.0}
+        ]
+    },
+    "Christmas Dragon": {
+        sizes: [
+            {name:"Normal", mult:1}, {name:"Tiny", mult:1.2}, {name:"Big", mult:1.4}, {name:"Huge", mult:1.8}, {name:"Collosal", mult:2.2}
+        ],
+        mutations: [
+            {name:"Shiny", mult:2.2}, {name:"Neon", mult:4.0}
+        ]
+    },
+    "Nugget": {
+        sizes: [
+            {name:"Normal", mult:1}, {name:"Tiny", mult:2.0}, {name:"Big", mult:3.0}, {name:"Huge", mult:5.0}, {name:"Collosal", mult:10.0}
+        ],
+        mutations: [
+            {name:"Shiny", mult:10.0}, {name:"Neon", mult:25.0}
+        ]
+    }
 };
 
-const sizes = [
-    {name:"Normal", mult:1},
-    {name:"Tiny", mult:1.25},
-    {name:"Big", mult:1.5},
-    {name:"Huge", mult:1.75},
-    {name:"Collosal", mult:2}
+const defaultSizes = [
+    {name:"Normal", mult:1}, {name:"Tiny", mult:1.25}, {name:"Big", mult:1.5}, {name:"Huge", mult:1.75}, {name:"Collosal", mult:2}
 ];
 
-const mutations = [
-    {name:"Shiny", mult:2},
-    {name:"Albino", mult:1.25},
-    {name:"Gold", mult:1.5},
-    {name:"Rainbow", mult:1.75},
-    {name:"Glass", mult:1.7},
-    {name:"Cosmic", mult:1.1},
-    {name:"Charged", mult:1.1},
-    {name:"Frozen", mult:1.25},
-    {name:"Volcanic", mult:1.5},
-    {name:"Seabound", mult:1.1},
-    {name:"Neon", mult:2.5}
+const defaultMutations = [
+    {name:"Shiny", mult:2}, {name:"Albino", mult:1.25}, {name:"Gold", mult:1.5}, {name:"Rainbow", mult:1.75}, {name:"Glass", mult:1.7}, 
+    {name:"Cosmic", mult:1.1}, {name:"Charged", mult:1.1}, {name:"Frozen", mult:1.25}, {name:"Volcanic", mult:1.5}, {name:"Seabound", mult:1.1}, {name:"Neon", mult:2.5}
 ];
+
+// --- TREND SETTERS ---
+const trendSetters = ["Nugget", "Evil Feep", "Christmas Dragon", "Infernal Hydra",];
+
+const items = {
+    secrets: [
+        {name:"Nugget", val:650, demand:5, rarity:"Secret", img: "images/nugget.png"},
+        {name:"Ethdaniel", val:150, demand:3, rarity:"Secret", img: "images/ethdaniel.png"},
+        {name:"Giant Duck", val:100, demand:4, rarity:"Secret", img: "images/giantduck.png"},
+        {name:"Dingrat", val:50, demand:2, rarity:"Secret", img: "images/dingrat.png"},
+        {name:"Giant Worm", val:87.5, demand:3.5, rarity:"Secret", img: "images/giantworm.png"},
+        {name:"Feep", val:75, demand:2, rarity:"Secret", img: "images/feep.png"},
+        {name:"404 Goat", val:50, demand:1, rarity:"Secret", img: "images/404goat.png"},
+    ],
+    christmas: [
+        {name:"Christmas Dragon", val:1500, demand:5, rarity:"Exclusive", img: "images/christmasdragon.png"},
+        {name:"Mammoth", val:320, demand:2.5, rarity:"Exclusive", img: "images/mammoth.png"},
+        {name:"Narwhal", val:250, demand:3, rarity:"Exclusive", img: "images/narwhal.png"},
+        {name:"Musk Ox", val:100, demand:2, rarity:"Exclusive", img: "images/muskox.png"},
+        {name:"Arctic Fox", val:50, demand:5, rarity:"Exclusive", img: "images/arcticfox.png"},
+    ],
+    exclusive_egg_1: [
+        {name:"Evil Feep", val:2625, demand:5, rarity:"Exclusive", img: "images/evilfeep.png"},
+        {name:"Ice Dragon", val:335, demand:3, rarity:"Exclusive", img: "images/icedragon.png"},
+        {name:"Phoenix", val:150, demand:2.5, rarity:"Exclusive", img: "images/phoenix.png"},
+        {name:"Lava Bear", val:100, demand:2.5, rarity:"Exclusive", img: "images/lavabear.png"},
+    ],
+    prehistoric: [
+        {name:"Infernal Hydra", val:3000, demand:4, rarity:"Exclusive", img: "images/infernalhydra.png"},
+        {name:"Infernal Axolotl", val:425, demand:3.75, rarity:"Exclusive", img: "images/infernalaxolotl.png"},
+        {name:"Butterfly", val:175, demand:3.5, rarity:"Exclusive", img: "images/butterfly.png"},
+        {name:"Dragonfly", val:180, demand:3, rarity:"Exclusive", img: "images/dragonfly.png"},
+        {name:"Pterodactyl", val:50, demand:2, rarity:"Exclusive", img: "images/pterodactyl.png"},
+    ],
+    mythic: [
+        {name:"Lightning Dragon", val:220, demand:4.5, rarity:"Mythic", img: "images/lightningdragon.png"},
+        {name:"Celestial Hydra", val:145, demand:4, rarity:"Mythic", img: "images/celestialhydra.png"},
+        {name:"Yeti", val:60, demand:1.5, rarity:"Mythic", img: "images/yeti.png"},
+        {name:"Cosmic Griffin", val:85, demand:3.5, rarity:"Mythic", img: "images/cosmicgriffin.png"},
+        {name:"Griffin", val:95, demand:2, rarity:"Mythic", img: "images/griffin.png"},
+        {name:"Basilik", val:95, demand:2, rarity:"Mythic", img: "images/basilik.png"},
+        {name:"Emerald Dragon", val:75, demand:2, rarity:"Mythic", img: "images/emeralddragon.png"},
+        {name:"Brontosaurus", val:40, demand:2, rarity:"Mythic", img: "images/brontosaurus.png"},
+        {name:"T-Rex", val:55, demand:2.5, rarity:"Mythic", img: "images/t-rex.png"},
+        {name:"Mantis", val:40, demand:2, rarity:"Mythic", img: "images/mantis.png"},
+        {name:"Hydra", val:110, demand:3, rarity:"Mythic", img: "images/hydra.png"},
+        {name:"Celestial Griffin", val:85, demand:3, rarity:"Mythic", img: "images/celestialgriffin.png"},
+        {name:"Celestial Axolotl", val:130, demand:4, rarity:"Mythic", img: "images/celestialaxolotl.png"},
+        {name:"Galaxy Axolotl", val:112.5, demand:4, rarity:"Mythic", img: "images/galaxyaxolotl.png"},
+        {name:"Galaxy Kitsune", val:112.5, demand:3.5, rarity:"Mythic", img: "images/galaxykitsune.png"},
+        {name:"Cerberus", val:17.5, demand:1.5, rarity:"Mythic", img: "images/cerberus.png"},
+        {name:"Red Fox", val:15, demand:1.5, rarity:"Mythic", img: "images/redfox.png"},
+        {name:"Kitsune", val:12.5, demand:1, rarity:"Mythic", img: "images/kitsune.png"},
+        {name:"Axolotl", val:12.5, demand:1, rarity:"Mythic", img: "images/axolotl.png"},
+        {name:"Megalodon", val:70, demand:2.5, rarity:"Mythic", img: "images/megalodon.png"},
+        {name:"Kraken", val:65, demand:2, rarity:"Mythic", img: "images/kraken.png"}
+    ],
+    eggs: [
+        {name:"Xmas Egg", val:175, demand:5, rarity:"Exclusive", isEgg: true, img: "images/xmasegg.png"},
+        {name:"Exclusive Egg", val:125, demand:4, rarity:"Exclusive", isEgg: true, img: "images/exclusiveegg.png"},
+        {name:"Prehistoric Egg", val:150, demand:4, rarity:"Exclusive", isEgg: true, img: "images/prehistoricegg.png"},
+        {name:"Celestial Hydra Egg", val:125, demand:4, rarity:"Mythic", isEgg: true, img: "images/celestialhydraegg.png"},
+        {name:"Hydra Egg", val:110, demand:3.5, rarity:"Mythic", isEgg: true, img: "images/hydraegg.png"},
+        {name:"Celestial Axolotl Egg", val:115, demand:4.5, rarity:"Mythic", isEgg: true, img: "images/celestialaxolotlegg.png"},
+        {name:"Celestial Griffin Egg", val:85, demand:2.5, rarity:"Mythic", isEgg: true, img: "images/celestialgriffinegg.png"},
+        {name:"Galaxy Axolotl Egg", val:100, demand:4, rarity:"Mythic", isEgg: true, img: "images/galaxyaxolotlegg.png"},
+        {name:"Galaxy Kitsune Egg", val:90, demand:3.5, rarity:"Mythic", isEgg: true, img: "images/galaxykitsuneegg.png"},
+    ]
+};
 
 let trades = { left: [], right: [] };
 let activeSide = null;
 let currentItem = null;
 let currentSizeMult = 1;
 let currentMutMults = [];
-let lastModalPool = [];
 
 function formatVal(v){ return v>=1000 ? (v/1000).toFixed(1)+'K' : v; }
 
-function getItemHTML(item, delay){
-    return `
-        <div class="card" style="animation-delay: ${delay}ms" onclick='openStatsModal(${JSON.stringify(item)})'>
-            <div class="placeholder">${item.img ? `<img src="${item.img}" class="item-img">` : item.name}</div>
-            <div class="rarity-${item.rarity.toLowerCase()}">${item.name}</div>
-            <div class="card-value">${formatVal(item.val)}</div>
-            <div class="card-info">Demand: ${item.demand}/5</div>
-        </div>
-    `;
+function getPetImgs(){
+    const all = [];
+    for(let cat in items) all.push(...items[cat]);
+    return all;
 }
 
 function renderValueList(filter = ''){
+    const trendingGrid = document.getElementById('grid-trending');
+    trendingGrid.innerHTML = '';
+    const allItems = getPetImgs();
+    const trendingItems = allItems.filter(i => trendSetters.includes(i.name));
+    trendingItems.forEach(item => {
+        trendingGrid.innerHTML += createCardHTML(item, true);
+    });
+
     const map = {
         secrets: 'grid-secrets',
         christmas: 'grid-christmas',
@@ -377,14 +357,26 @@ function renderValueList(filter = ''){
     };
     for(let cat in map){
         const g = document.getElementById(map[cat]);
-        if(!g) continue;
         g.innerHTML = '';
         const filtered = items[cat].filter(i => i.name.toLowerCase().includes(filter.toLowerCase()));
-        filtered.forEach((item, idx)=>{
-            g.innerHTML += getItemHTML(item, idx * 30);
+        filtered.forEach(item => {
+            g.innerHTML += createCardHTML(item);
         });
         g.previousElementSibling.style.display = filtered.length > 0 ? 'block' : 'none';
     }
+}
+
+function createCardHTML(item, isTrending = false){
+    const trendingBadge = isTrending || trendSetters.includes(item.name) ? '<div class="trending-badge">Trending</div>' : '';
+    return `
+        <div class="card" onclick='openStatsModal(${JSON.stringify(item)})'>
+            ${trendingBadge}
+            <div class="placeholder"><img src="${item.img}" class="item-img" onerror="this.src='https://placehold.co/100x100/1e293b/white?text=${item.name.split(' ')[0]}'"></div>
+            <div class="rarity-${item.rarity.toLowerCase()}">${item.name}</div>
+            <div class="card-value">${formatVal(item.val)}</div>
+            <div class="card-info">Demand: ${item.demand}/5</div>
+        </div>
+    `;
 }
 
 function filterValueList(){
@@ -393,13 +385,8 @@ function filterValueList(){
 }
 
 function showSection(id){
-    document.querySelectorAll('section').forEach(s=>{
-        s.classList.add('hidden');
-        s.style.opacity = '0';
-    });
-    const active = document.getElementById(id);
-    active.classList.remove('hidden');
-    setTimeout(() => active.style.opacity = '1', 10);
+    document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
     document.getElementById('nav-menu').classList.remove('active');
 }
 
@@ -410,20 +397,14 @@ function openInitialModal(side){
     document.getElementById('initial-modal').style.display = 'flex';
 }
 
+function closeModal(id){ document.getElementById(id).style.display = 'none'; }
+
 function selectCategory(type){
     closeModal('initial-modal');
     const modal = document.getElementById('item-modal');
     document.getElementById('modal-search').value = '';
-
-    let pool = [];
-    if(type === 'egg') pool = items.eggs;
-    else {
-        for(let cat in items){
-            if(cat === 'eggs') continue;
-            pool = pool.concat(items[cat]);
-        }
-    }
-    lastModalPool = pool;
+    const pool = type === 'egg' ? items.eggs : getPetImgs().filter(i => !i.isEgg);
+    window.lastModalPool = pool;
     renderModalItems(pool);
     modal.style.display = 'flex';
 }
@@ -434,127 +415,97 @@ function renderModalItems(pool){
     pool.forEach(item => {
         const btn = document.createElement('button');
         btn.textContent = item.name;
-        btn.className = 'category-btn btn-anim';
-        btn.onclick = () => {
-            if(item.isEgg) {
-                activeSide ? addEggDirect(item) : openStatsModal(item);
-            }
-            else openStatsModal(item);
-        };
+        btn.className = 'category-btn';
+        btn.onclick = () => openStatsModal(item);
         list.appendChild(btn);
     });
 }
 
 function filterModalItems(){
-    const query = document.getElementById('modal-search').value.toLowerCase();
-    const filtered = lastModalPool.filter(i => i.name.toLowerCase().includes(query));
+    const q = document.getElementById('modal-search').value.toLowerCase();
+    const filtered = window.lastModalPool.filter(i => i.name.toLowerCase().includes(q));
     renderModalItems(filtered);
-}
-
-function addEggDirect(item){
-    trades[activeSide].push({
-        name: item.name,
-        rarity: item.rarity,
-        val: item.val,
-        img: item.img,
-        details: 'Egg'
-    });
-    closeModal('item-modal');
-    renderTrades();
 }
 
 function openStatsModal(item){
     currentItem = item;
     currentSizeMult = 1;
     currentMutMults = [];
-
     closeModal('item-modal');
-    closeModal('initial-modal');
-
     const modal = document.getElementById('stats-modal');
     document.getElementById('stats-modal-title').textContent = item.name;
-    document.getElementById('stats-img-box').innerHTML = item.img ? `<img src="${item.img}">` : `<span style="color:#475569">${item.name}</span>`;
-
-    document.getElementById('detail-rarity').textContent = item.rarity;
-    document.getElementById('detail-val').textContent = formatVal(item.val);
-    document.getElementById('detail-demand').textContent = item.demand + '/5';
-    document.getElementById('demand-row').style.display = item.isEgg ? 'none' : 'flex';
-
+    document.getElementById('stats-img-box').innerHTML = `<img src="${item.img}" onerror="this.src='https://placehold.co/150x150/020617/white?text=${item.name.split(' ')[0]}'">`;
+    
     const isEgg = item.isEgg;
     document.getElementById('pet-stats-controls').className = isEgg ? 'hidden' : '';
     document.getElementById('egg-stats-controls').className = isEgg ? '' : 'hidden';
-    document.getElementById('add-to-trade-btn').style.display = activeSide ? 'block' : 'none';
-
+    
     if(!isEgg){
+        const pool = customMultipliers[item.name] || { sizes: defaultSizes, mutations: defaultMutations };
         const sizeOpts = document.getElementById('size-options');
         sizeOpts.innerHTML = '';
-        sizes.forEach(s => {
+        pool.sizes.forEach(s => {
             const btn = document.createElement('button');
             btn.textContent = s.name;
-            btn.className = s.mult === 1 ? 'size-btn active-btn btn-anim' : 'size-btn btn-anim';
+            btn.className = s.mult === 1 ? 'category-btn active-btn' : 'category-btn';
             btn.onclick = (e) => {
-                document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active-btn'));
-                e.target.classList.add('active-btn');
+                document.querySelectorAll('.size-btn-active').forEach(b => b.classList.remove('active-btn'));
+                btn.classList.add('active-btn');
                 currentSizeMult = s.mult;
                 updateTempTotal();
             };
+            btn.classList.add('size-btn-active');
             sizeOpts.appendChild(btn);
         });
 
         const mutOpts = document.getElementById('mutation-options');
         mutOpts.innerHTML = '';
-        mutations.forEach(m => {
+        pool.mutations.forEach(m => {
             const btn = document.createElement('button');
             btn.textContent = m.name;
-            btn.className = 'mut-btn btn-anim';
-            btn.onclick = (e) => {
-                if(currentMutMults.includes(m.mult)){
-                    currentMutMults = currentMutMults.filter(x => x !== m.mult);
-                    e.target.classList.remove('active-btn');
+            btn.className = 'category-btn';
+            btn.onclick = () => {
+                const idx = currentMutMults.indexOf(m.mult);
+                if(idx > -1) {
+                    currentMutMults.splice(idx, 1);
+                    btn.classList.remove('active-btn');
                 } else {
                     currentMutMults.push(m.mult);
-                    e.target.classList.add('active-btn');
+                    btn.classList.add('active-btn');
                 }
                 updateTempTotal();
             };
             mutOpts.appendChild(btn);
         });
     }
-
-    modal.style.display = 'flex';
     updateTempTotal();
+    modal.style.display = 'flex';
 }
 
 function updateTempTotal(){
-    let mult = currentSizeMult;
-    currentMutMults.forEach(m => mult *= m);
-    document.getElementById('temp-total-val').textContent = formatVal(currentItem.val * mult);
+    let total = currentItem.val * currentSizeMult;
+    currentMutMults.forEach(m => total *= m);
+    document.getElementById('temp-total-val').textContent = formatVal(total);
 }
 
 function finishAddingItem(){
-    if(!activeSide) return;
-    let mult = currentSizeMult;
-    currentMutMults.forEach(m => mult *= m);
-    const sizeName = sizes.find(s => s.mult === currentSizeMult).name;
-    const mutNames = mutations.filter(m => currentMutMults.includes(m.mult)).map(m => m.name).join(', ');
+    if(!activeSide) { closeModal('stats-modal'); return; }
+    let val = currentItem.val * currentSizeMult;
+    currentMutMults.forEach(m => val *= m);
+    
     trades[activeSide].push({
         name: currentItem.name,
         rarity: currentItem.rarity,
-        val: currentItem.val * mult,
+        val: val,
         img: currentItem.img,
-        details: currentItem.isEgg ? 'Egg' : `${sizeName}${mutNames ? ' + ' + mutNames : ''}`
+        details: currentItem.isEgg ? 'Egg' : 'Custom Stats'
     });
     closeModal('stats-modal');
     renderTrades();
 }
 
-function closeModal(id){ 
-    document.getElementById(id).style.display = 'none'; 
-    if(id === 'stats-modal') activeSide = null;
-}
-
-function removeTradeItem(side, index){
-    trades[side].splice(index, 1);
+function removeTradeItem(side, idx){
+    trades[side].splice(idx, 1);
     renderTrades();
 }
 
@@ -568,11 +519,11 @@ function renderTrades(){
             const div = document.createElement('div');
             div.className = 'trade-item';
             div.innerHTML = `
-                <div class="item-thumb">${item.img ? `<img src="${item.img}">` : `<span style="font-size:0.6rem">${item.name}</span>`}</div>
+                <div class="item-thumb"><img src="${item.img}" onerror="this.src='https://placehold.co/50x50/334155/white?text=${item.name[0]}'"></div>
                 <div class="item-details">
-                    <span class="rarity-${item.rarity.toLowerCase()}" style="font-weight:bold; font-size:0.9rem">${item.name}</span>
-                    <span style="font-size:0.65rem; color:#94a3b8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${item.details}</span>
-                    <span style="color:#10b981; font-weight:600; font-size:0.85rem">${formatVal(item.val)}</span>
+                    <span class="rarity-${item.rarity.toLowerCase()}" style="font-weight:bold">${item.name}</span>
+                    <span style="font-size:0.7rem; color:#94a3b8">${item.details}</span>
+                    <span style="color:#10b981; font-weight:600">${formatVal(item.val)}</span>
                 </div>
                 <button class="remove-btn" onclick="removeTradeItem('${side}', ${idx})">×</button>
             `;
@@ -580,10 +531,23 @@ function renderTrades(){
         });
         document.getElementById(`total-${side}`).innerText = formatVal(total);
     });
+    updateFairness();
+}
+
+function updateFairness(){
+    const left = trades.left.reduce((acc, i) => acc + i.val, 0);
+    const right = trades.right.reduce((acc, i) => acc + i.val, 0);
+    const diffInd = document.getElementById('diff-indicator');
+    if(!diffInd) return;
+    if(left === 0 && right === 0) diffInd.innerText = 'Add items to calculate';
+    else {
+        const diff = right - left;
+        const p = (diff / left) * 100;
+        diffInd.innerText = p > 15 ? 'HUGE WIN' : p < -15 ? 'HUGE LOSS' : 'FAIR TRADE';
+    }
 }
 
 renderValueList();
-renderTrades();
 </script>
 </body>
 </html>
