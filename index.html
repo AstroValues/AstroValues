@@ -317,7 +317,7 @@ const items = {
     secrets: {
         name: "Secrets",
         pool: [
-            {name:"Nugget", val:650, demand:5, rarity:"Secret", img: "images/nugget.png"},
+            {name:"Nugget", val:1350, demand:5, rarity:"Secret", img: "images/nugget.png"},
             {name:"Ethdaniel", val:150, demand:3, rarity:"Secret", img: "images/ethdaniel.png"},
             {name:"Giant Duck", val:100, demand:4, rarity:"Secret", img: "images/giantduck.png"},
             {name:"Dingrat", val:50, demand:2, rarity:"Secret", img: "images/dingrat.png"},
@@ -329,18 +329,28 @@ const items = {
     christmas: {
         name: "Christmas Pets",
         pool: [
-            {name:"Christmas Dragon", val:1500, demand:5, rarity:"Exclusive", img: "images/christmasdragon.png"},
+            {name:"Christmas Dragon", val:2500, demand:5, rarity:"Exclusive", img: "images/christmasdragon.png"},
             {name:"Mammoth", val:320, demand:2.5, rarity:"Exclusive", img: "images/mammoth.png"},
             {name:"Narwhal", val:250, demand:3, rarity:"Exclusive", img: "images/narwhal.png"},
             {name:"Musk Ox", val:100, demand:2, rarity:"Exclusive", img: "images/muskox.png"},
             {name:"Arctic Fox", val:50, demand:5, rarity:"Exclusive", img: "images/arcticfox.png"},
         ]
     },
+    love_event: {
+        name: "Love Event Pets",
+        pool: [
+            {name:"Heartbreak Dragon", val:3000, demand:5, rarity:"Exclusive", img: "images/heartbreakdragon.png"},
+            {name:"Cherry Orca", val:200, demand:3, rarity:"Exclusive", img: "images/cherryorca.png"},
+            {name:"Love Pegasus", val:150, demand:2.5, rarity:"Exclusive", img: "images/lovepegasus.png"},
+            {name:"Velvet Panther", val:100, demand:2, rarity:"Exclusive", img: "images/velvetpanther.png"},
+            {name:"Rose Kitsune", val:65, demand:1, rarity:"Exclusive", img: "images/rosekitsune.png"}
+        ]
+    },
     exclusive_egg: {
         name: "Exclusive Egg Pets",
         pool: [
             {name:"Evil Feep", val:1500, demand:5, rarity:"Exclusive", img: "images/evilfeep.png"},
-            {name:"Ice Dragon", val:375, demand:3, rarity:"Exclusive", img: "images/icedragon.png"},
+            {name:"Ice Dragon", val:500, demand:3, rarity:"Exclusive", img: "images/icedragon.png"},
             {name:"Phoenix", val:150, demand:2.5, rarity:"Exclusive", img: "images/phoenix.png"},
             {name:"Lava Bear", val:100, demand:2.5, rarity:"Exclusive", img: "images/lavabear.png"},
         ]
@@ -423,7 +433,7 @@ const items = {
     }
 };
 
-const trendSetters = ["Nugget", "Evil Feep", "Christmas Dragon", "Infernal Hydra", "Skeleton Leviathan"];
+const trendSetters = ["Nugget", "Evil Feep", "Christmas Dragon", "Infernal Hydra", "Skeleton Leviathan", "Heartbreak Dragon", "Ice Dragon"];
 
 // --- MULTIPLIERS ---
 const customMutations = [
@@ -433,6 +443,8 @@ const customMutations = [
 const customMultipliers = {
     "Evil Feep": { sizes: [{name:"Normal", mult:1}, {name:"Tiny", mult:1.3}, {name:"Big", mult:3.0}, {name:"Huge", mult:5.75}, {name:"Collosal", mult:12.5}], mutations: customMutations },
     "Infernal Hydra": { sizes: [{name:"Normal", mult:1}, {name:"Tiny", mult:1.5}, {name:"Big", mult:3.0}, {name:"Huge", mult:6.0}, {name:"Collosal", mult:10.0}], mutations: customMutations },
+    "Heartbreak Dragon": { sizes: [{name:"Normal", mult:1}, {name:"Tiny", mult:1.5}, {name:"Big", mult:3.0}, {name:"Huge", mult:6.0}, {name:"Collosal", mult:10.0}], mutations: customMutations },
+    "Ice Dragon": { sizes: [{name:"Normal", mult:1}, {name:"Tiny", mult:1.5}, {name:"Big", mult:3.0}, {name:"Huge", mult:4.5}, {name:"Collosal", mult:6.0}], mutations: customMutations },
     "Christmas Dragon": { sizes: [{name:"Normal", mult:1}, {name:"Tiny", mult:1.2}, {name:"Big", mult:3.0}, {name:"Huge", mult:8.0}, {name:"Collosal", mult:10.0}], mutations: customMutations },
     "Nugget": { sizes: [{name:"Normal", mult:1}, {name:"Tiny", mult:4.5}, {name:"Big", mult:2.5}, {name:"Huge", mult:4.0}, {name:"Collosal", mult:5.0}], mutations: customMutations }
 };
@@ -505,7 +517,7 @@ function initializeUI(){
     selector.innerHTML = '<option value="all">All Categories</option>';
     container.innerHTML = '';
 
-    const order = ['trending', 'secrets', 'christmas', 'exclusive_egg', 'prehistoric_egg', 'skeleton', 'mythic', 'eggs', 'totems', 'potions'];
+    const order = ['trending', 'secrets', 'christmas', 'love_event', 'exclusive_egg', 'prehistoric_egg', 'skeleton', 'mythic', 'eggs', 'totems', 'potions'];
     
     order.forEach(id => {
         if(!items[id]) return;
