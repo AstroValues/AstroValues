@@ -314,91 +314,91 @@
 // --- DATA DEFINITION ---
 const items = {
     trending: { name: "Trending Now", pool: [], isHiddenData: true },
-    secrets: {
-        name: "Secrets",
-        pool: [
-            {name:"Nugget", val:1350, demand:5, rarity:"Secret", img: "images/nugget.png"},
-            {name:"Ethdaniel", val:150, demand:3, rarity:"Secret", img: "images/ethdaniel.png"},
-            {name:"Giant Duck", val:100, demand:4, rarity:"Secret", img: "images/giantduck.png"},
-            {name:"Dingrat", val:50, demand:2, rarity:"Secret", img: "images/dingrat.png"},
-            {name:"Giant Worm", val:87.5, demand:3.5, rarity:"Secret", img: "images/giantworm.png"},
-            {name:"Feep", val:75, demand:2, rarity:"Secret", img: "images/feep.png"},
-            {name:"404 Goat", val:50, demand:1, rarity:"Secret", img: "images/404goat.png"},
-        ]
-    },
-    christmas: {
-        name: "Christmas Pets",
-        pool: [
-            {name:"Christmas Dragon", val:2500, demand:5, rarity:"Exclusive", img: "images/christmasdragon.png"},
-            {name:"Mammoth", val:320, demand:2.5, rarity:"Exclusive", img: "images/mammoth.png"},
-            {name:"Narwhal", val:250, demand:3, rarity:"Exclusive", img: "images/narwhal.png"},
-            {name:"Musk Ox", val:100, demand:2, rarity:"Exclusive", img: "images/muskox.png"},
-            {name:"Arctic Fox", val:50, demand:5, rarity:"Exclusive", img: "images/arcticfox.png"},
-        ]
-    },
-    love_event: {
-        name: "Love Event Pets",
-        pool: [
-            {name:"Heartbreak Dragon", val:3000, demand:5, rarity:"Exclusive", img: "images/heartbreakdragon.png"},
-            {name:"Cherry Orca", val:200, demand:3, rarity:"Exclusive", img: "images/cherryorca.png"},
-            {name:"Love Pegasus", val:150, demand:2.5, rarity:"Exclusive", img: "images/lovepegasus.png"},
-            {name:"Velvet Panther", val:100, demand:2, rarity:"Exclusive", img: "images/velvetpanther.png"},
-            {name:"Rose Kitsune", val:65, demand:1, rarity:"Exclusive", img: "images/rosekitsune.png"}
-        ]
-    },
-    exclusive_egg: {
-        name: "Exclusive Egg Pets",
-        pool: [
-            {name:"Evil Feep", val:1500, demand:5, rarity:"Exclusive", img: "images/evilfeep.png"},
-            {name:"Ice Dragon", val:500, demand:3, rarity:"Exclusive", img: "images/icedragon.png"},
-            {name:"Phoenix", val:150, demand:2.5, rarity:"Exclusive", img: "images/phoenix.png"},
-            {name:"Lava Bear", val:100, demand:2.5, rarity:"Exclusive", img: "images/lavabear.png"},
-        ]
-    },
-    prehistoric_egg: {
-        name: "Prehistoric Pets",
-        pool: [
-            {name:"Infernal Hydra", val:3000, demand:4, rarity:"Exclusive", img: "images/infernalhydra.png"},
-            {name:"Infernal Axolotl", val:425, demand:3.75, rarity:"Exclusive", img: "images/infernalaxolotl.png"},
-            {name:"Butterfly", val:175, demand:3.5, rarity:"Exclusive", img: "images/butterfly.png"},
-            {name:"Dragonfly", val:180, demand:3, rarity:"Exclusive", img: "images/dragonfly.png"},
-            {name:"Pterodactyl", val:50, demand:2, rarity:"Exclusive", img: "images/pterodactyl.png"},
-        ]
-    },
-    skeleton: {
-        name: "Skeleton Pets",
-        pool: [
-            {name:"Skeleton Leviathan", val:375, demand:4, rarity:"Exclusive", img: "images/skeletonleviathan.png"},
-            {name:"Cursed Goliath Toad", val:100, demand:2.5, rarity:"Exclusive", img: "images/cursedgoliathtoad.png"},
-            {name:"Skeleton Colossus Turtle", val:50, demand:2.5, rarity:"Exclusive", img: "images/skeletoncolossusturtle.png"},
-            {name:"Skeleton Scorpion", val:25, demand:1, rarity:"Exclusive", img: "images/skeletonscorpion.png"},
-            {name:"Skeleton Crocodile", val:10, demand:0, rarity:"Exclusive", img: "images/skeletoncrocodile.png"}
-        ]
-    },
-    mythic: {
-        name: "Mythic Pets",
-        pool: [
-            {name:"Lightning Dragon", val:220, demand:4.5, rarity:"Mythic", img: "images/lightningdragon.png"},
-            {name:"Celestial Hydra", val:145, demand:4, rarity:"Mythic", img: "images/celestialhydra.png"},
-            {name:"Yeti", val:60, demand:1.5, rarity:"Mythic", img: "images/yeti.png"},
-            {name:"Cosmic Griffin", val:85, demand:3.5, rarity:"Mythic", img: "images/cosmicgriffin.png"},
-            {name:"Griffin", val:95, demand:2, rarity:"Mythic", img: "images/griffin.png"},
-            {name:"Basilik", val:95, demand:2, rarity:"Mythic", img: "images/basilik.png"},
-            {name:"Emerald Dragon", val:75, demand:2, rarity:"Mythic", img: "images/emeralddragon.png"},
-            {name:"Brontosaurus", val:40, demand:2, rarity:"Mythic", img: "images/brontosaurus.png"},
-            {name:"T-Rex", val:55, demand:2.5, rarity:"Mythic", img: "images/t-rex.png"},
-            {name:"Mantis", val:40, demand:2, rarity:"Mythic", img: "images/mantis.png"},
-            {name:"Hydra", val:110, demand:3, rarity:"Mythic", img: "images/hydra.png"},
-            {name:"Celestial Griffin", val:85, demand:3, rarity:"Mythic", img: "images/celestialgriffin.png"},
-            {name:"Celestial Axolotl", val:130, demand:4, rarity:"Mythic", img: "images/celestialaxolotl.png"},
-            {name:"Galaxy Axolotl", val:112.5, demand:4, rarity:"Mythic", img: "images/galaxyaxolotl.png"},
-            {name:"Galaxy Kitsune", val:112.5, demand:3.5, rarity:"Mythic", img: "images/galaxykitsune.png"},
-            {name:"Cerberus", val:17.5, demand:1.5, rarity:"Mythic", img: "images/cerberus.png"},
-            {name:"Red Fox", val:15, demand:1.5, rarity:"Mythic", img: "images/redfox.png"},
-            {name:"Kitsune", val:12.5, demand:1, rarity:"Mythic", img: "images/kitsune.png"},
-            {name:"Axolotl", val:12.5, demand:1, rarity:"Mythic", img: "images/axolotl.png"},
-            {name:"Megalodon", val:70, demand:2.5, rarity:"Mythic", img: "images/megalodon.png"},
-            {name:"Kraken", val:65, demand:2, rarity:"Mythic", img: "images/kraken.png"}
+        secrets: {
+            name: "Secrets",
+            pool: [
+                {name:"Nugget", val:1350, demand:5, rarity:"Secret", img: "images/nugget.png", history:[1350]},
+                {name:"Ethdaniel", val:150, demand:3, rarity:"Secret", img: "images/ethdaniel.png", history:[150]},
+                {name:"Giant Duck", val:100, demand:4, rarity:"Secret", img: "images/giantduck.png", history:[100]},
+                {name:"Dingrat", val:50, demand:2, rarity:"Secret", img: "images/dingrat.png", history:[50]},
+                {name:"Giant Worm", val:87.5, demand:3.5, rarity:"Secret", img: "images/giantworm.png", history:[87.5]},
+                {name:"Feep", val:75, demand:2, rarity:"Secret", img: "images/feep.png", history:[75]},
+                {name:"404 Goat", val:50, demand:1, rarity:"Secret", img: "images/404goat.png", history:[50]},
+            ]
+        },
+        christmas: {
+            name: "Christmas Pets",
+            pool: [
+                {name:"Christmas Dragon", val:2500, demand:5, rarity:"Exclusive", img: "images/christmasdragon.png", history:[2500]},
+                {name:"Mammoth", val:320, demand:2.5, rarity:"Exclusive", img: "images/mammoth.png", history:[320]},
+                {name:"Narwhal", val:250, demand:3, rarity:"Exclusive", img: "images/narwhal.png", history:[250]},
+                {name:"Musk Ox", val:100, demand:2, rarity:"Exclusive", img: "images/muskox.png", history:[100]},
+                {name:"Arctic Fox", val:50, demand:5, rarity:"Exclusive", img: "images/arcticfox.png", history:[50]},
+            ]
+        },
+        love_event: {
+            name: "Love Event Pets",
+            pool: [
+                {name:"Heartbreak Dragon", val:3000, demand:5, rarity:"Exclusive", img: "images/heartbreakdragon.png", history:[3000]},
+                {name:"Cherry Orca", val:200, demand:3, rarity:"Exclusive", img: "images/cherryorca.png", history:[200]},
+                {name:"Love Pegasus", val:150, demand:2.5, rarity:"Exclusive", img: "images/lovepegasus.png", history:[150]},
+                {name:"Velvet Panther", val:100, demand:2, rarity:"Exclusive", img: "images/velvetpanther.png", history:[100]},
+                {name:"Rose Kitsune", val:65, demand:1, rarity:"Exclusive", img: "images/rosekitsune.png", history:[65]},
+            ]
+        },
+        exclusive_egg: {
+            name: "Exclusive Egg Pets",
+            pool: [
+                {name:"Evil Feep", val:1500, demand:5, rarity:"Exclusive", img: "images/evilfeep.png", history:[1500]},
+                {name:"Ice Dragon", val:500, demand:3, rarity:"Exclusive", img: "images/icedragon.png", history:[500]},
+                {name:"Phoenix", val:150, demand:2.5, rarity:"Exclusive", img: "images/phoenix.png", history:[150]},
+                {name:"Lava Bear", val:100, demand:2.5, rarity:"Exclusive", img: "images/lavabear.png", history:[100]},
+            ]
+        },
+        prehistoric_egg: {
+            name: "Prehistoric Pets",
+            pool: [
+                {name:"Infernal Hydra", val:3000, demand:4, rarity:"Exclusive", img: "images/infernalhydra.png", history:[3000]},
+                {name:"Infernal Axolotl", val:425, demand:3.75, rarity:"Exclusive", img: "images/infernalaxolotl.png", history:[425]},
+                {name:"Butterfly", val:175, demand:3.5, rarity:"Exclusive", img: "images/butterfly.png", history:[175]},
+                {name:"Dragonfly", val:180, demand:3, rarity:"Exclusive", img: "images/dragonfly.png", history:[180]},
+                {name:"Pterodactyl", val:50, demand:2, rarity:"Exclusive", img: "images/pterodactyl.png", history:[50]},
+            ]
+        },
+        skeleton: {
+            name: "Skeleton Pets",
+            pool: [
+                {name:"Skeleton Leviathan", val:375, demand:4, rarity:"Exclusive", img: "images/skeletonleviathan.png", history:[375]},
+                {name:"Cursed Goliath Toad", val:100, demand:2.5, rarity:"Exclusive", img: "images/cursedgoliathtoad.png", history:[100]},
+                {name:"Skeleton Colossus Turtle", val:50, demand:2.5, rarity:"Exclusive", img: "images/skeletoncolossusturtle.png", history:[50]},
+                {name:"Skeleton Scorpion", val:25, demand:1, rarity:"Exclusive", img: "images/skeletonscorpion.png", history:[25]},
+                {name:"Skeleton Crocodile", val:10, demand:0, rarity:"Exclusive", img: "images/skeletoncrocodile.png", history:[10]},
+            ]
+        },
+        mythic: {
+            name: "Mythic Pets",
+            pool: [
+                {name:"Lightning Dragon", val:220, demand:4.5, rarity:"Mythic", img: "images/lightningdragon.png", history:[220]},
+                {name:"Celestial Hydra", val:145, demand:4, rarity:"Mythic", img: "images/celestialhydra.png", history:[145]},
+                {name:"Yeti", val:60, demand:1.5, rarity:"Mythic", img: "images/yeti.png", history:[60]},
+                {name:"Cosmic Griffin", val:85, demand:3.5, rarity:"Mythic", img: "images/cosmicgriffin.png", history:[85]},
+                {name:"Griffin", val:95, demand:2, rarity:"Mythic", img: "images/griffin.png", history:[95]},
+                {name:"Basilik", val:95, demand:2, rarity:"Mythic", img: "images/basilik.png", history:[95]},
+                {name:"Emerald Dragon", val:75, demand:2, rarity:"Mythic", img: "images/emeralddragon.png", history:[75]},
+                {name:"Brontosaurus", val:40, demand:2, rarity:"Mythic", img: "images/brontosaurus.png", history:[40]},
+                {name:"T-Rex", val:55, demand:2.5, rarity:"Mythic", img: "images/t-rex.png", history:[55]},
+                {name:"Mantis", val:40, demand:2, rarity:"Mythic", img: "images/mantis.png", history:[40]},
+                {name:"Hydra", val:110, demand:3, rarity:"Mythic", img: "images/hydra.png", history:[110]},
+                {name:"Celestial Griffin", val:85, demand:3, rarity:"Mythic", img: "images/celestialgriffin.png", history:[85]},
+                {name:"Celestial Axolotl", val:130, demand:4, rarity:"Mythic", img: "images/celestialaxolotl.png", history:[130]},
+                {name:"Galaxy Axolotl", val:112.5, demand:4, rarity:"Mythic", img: "images/galaxyaxolotl.png", history:[112.5]},
+                {name:"Galaxy Kitsune", val:112.5, demand:3.5, rarity:"Mythic", img: "images/galaxykitsune.png", history:[112.5]},
+                {name:"Cerberus", val:17.5, demand:1.5, rarity:"Mythic", img: "images/cerberus.png", history:[17.5]},
+                {name:"Red Fox", val:15, demand:1.5, rarity:"Mythic", img: "images/redfox.png", history:[15]},
+                {name:"Kitsune", val:12.5, demand:1, rarity:"Mythic", img: "images/kitsune.png", history:[12.5]},
+                {name:"Axolotl", val:12.5, demand:1, rarity:"Mythic", img: "images/axolotl.png", history:[12.5]},
+                {name:"Megalodon", val:70, demand:2.5, rarity:"Mythic", img: "images/megalodon.png", history:[70]},
+                {name:"Kraken", val:65, demand:2, rarity:"Mythic", img: "images/kraken.png", history:[65]},
         ]
     },
     eggs: {
